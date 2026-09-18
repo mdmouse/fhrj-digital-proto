@@ -42,8 +42,8 @@ html.jdy-embed .topbar,
 html.jdy-embed .demo-banner,
 html.jdy-embed .page-footer{display:none!important}
 html.jdy-embed .main-wrap{margin-left:0;width:100%}
-html.jdy-embed main{padding:18px 20px 28px;min-height:100vh;max-width:none}
-html.jdy-embed body{background:#f5f7f6}
+html.jdy-embed main{padding:16px 18px 40px;min-height:auto;max-width:none}
+html.jdy-embed,html.jdy-embed body{background:#f5f7f6;overflow:auto;height:auto;min-height:100%}
 html.jdy-embed .overlay{z-index:200}
 
 </style>
@@ -55,7 +55,7 @@ html.jdy-embed .overlay{z-index:200}
 <main id="main" tabindex="-1"></main><footer class="page-footer"><span>河北凤凰人家食品有限公司 · 数字化运营平台 / 2026.09</span><span>迁西工厂账套 · 订单、批次、质量与用友协同</span></footer></div></div>
 <div id="overlay" class="overlay hidden"><section id="dialog" class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle"><header class="dialog-header"><div><p id="dialogEyebrow" class="eyebrow">业务操作</p><h2 id="dialogTitle"></h2></div><button class="icon-btn" data-action="close" aria-label="关闭弹窗">×</button></header><div id="dialogBody" class="dialog-body"></div><footer id="dialogFooter" class="dialog-footer"></footer></section></div>
 <div id="toast" class="toast hidden" role="status"></div><div id="printArea"></div>
-<script>'use strict';
+<script>'use strict';window.JDY_PAGE='mobile';
 (function(){try{var q=new URLSearchParams(location.search);if(q.get('embed')==='1'||window.self!==window.top)document.documentElement.classList.add('jdy-embed')}catch(e){document.documentElement.classList.add('jdy-embed')}})();
 const TODAY='2026-09-17',STORE='fhrj-demo-v1.4';
 const NAV=[['经营与增长',[['dashboard','经营工作台','home'],['crm','客户与商机','users'],['orders','销售订单','doc'],['delivery','发货与售后','truck']]],['研发与产供销',[['products','产品库','box'],['purchase','采购与供应商','bag'],['planning','计划与物料','calendar'],['production','生产执行','factory'],['quality','质量与食品安全','shield'],['warehouse','仓储与保质期','warehouse'],['trace','批次追溯与召回','trace']]],['组织与保障',[['equipment','设备与能源','settings'],['hr','人力与班组','users'],['office','协同与审批','check'],['mobile','移动作业台','phone']]],['成本中心',[['finance','成本与财务协同','chart']]]];
@@ -749,7 +749,7 @@ const JDY_DASH={
 '6aacc6481a0eef8c99107a1d':'mobile',
 '6aacc4086876585b523f5288':'finance'
 };
-function pageFromHost(){try{let file=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');if(file&&file!=='index')return file;let q=new URLSearchParams(location.search).get('p');if(q)return q;let m=(document.referrer||'').match(/dash\/([a-f0-9]+)/i);if(m&&JDY_DASH[m[1]])return JDY_DASH[m[1]];}catch(e){}return location.hash.slice(1)||'dashboard'}
+function pageFromHost(){if(window.JDY_PAGE)return window.JDY_PAGE;try{let file=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');if(file&&file!=='index')return file;let q=new URLSearchParams(location.search).get('p');if(q)return q;let m=(document.referrer||'').match(/dash\/([a-f0-9]+)/i);if(m&&JDY_DASH[m[1]])return JDY_DASH[m[1]];}catch(e){}return location.hash.slice(1)||'dashboard'}
 function navigate(){let p=pageFromHost();if(!NAV.some(g=>g[1].some(i=>i[0]===p)))p='dashboard';page=p;filter='';filterStatus='全部';closeModal();render();window.scrollTo({top:0,behavior:'instant'});document.getElementById('sidebar').classList.remove('open')}
 function render(){navRender();const fn=PAGES[page];document.getElementById('main').innerHTML=fn?fn():empty('页面准备中','请切换模块');bindInputs()}
 function bindInputs(){document.getElementById('listSearch')?.addEventListener('input',e=>{filter=e.target.value;const pos=e.target.selectionStart;render();const el=document.getElementById('listSearch');el.focus();el.setSelectionRange(pos,pos)});document.getElementById('statusFilter')?.addEventListener('change',e=>{filterStatus=e.target.value;render()});document.getElementById('globalSearch')?.addEventListener('input',e=>searchResults(e.target.value))}

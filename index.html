@@ -42,8 +42,8 @@ html.jdy-embed .topbar,
 html.jdy-embed .demo-banner,
 html.jdy-embed .page-footer{display:none!important}
 html.jdy-embed .main-wrap{margin-left:0;width:100%}
-html.jdy-embed main{padding:18px 20px 28px;min-height:100vh;max-width:none}
-html.jdy-embed body{background:#f5f7f6}
+html.jdy-embed main{padding:16px 18px 40px;min-height:auto;max-width:none}
+html.jdy-embed,html.jdy-embed body{background:#f5f7f6;overflow:auto;height:auto;min-height:100%}
 html.jdy-embed .overlay{z-index:200}
 
 </style>
@@ -749,7 +749,7 @@ const JDY_DASH={
 '6aacc6481a0eef8c99107a1d':'mobile',
 '6aacc4086876585b523f5288':'finance'
 };
-function pageFromHost(){try{let file=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');if(file&&file!=='index')return file;let q=new URLSearchParams(location.search).get('p');if(q)return q;let m=(document.referrer||'').match(/dash\/([a-f0-9]+)/i);if(m&&JDY_DASH[m[1]])return JDY_DASH[m[1]];}catch(e){}return location.hash.slice(1)||'dashboard'}
+function pageFromHost(){if(window.JDY_PAGE)return window.JDY_PAGE;try{let file=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');if(file&&file!=='index')return file;let q=new URLSearchParams(location.search).get('p');if(q)return q;let m=(document.referrer||'').match(/dash\/([a-f0-9]+)/i);if(m&&JDY_DASH[m[1]])return JDY_DASH[m[1]];}catch(e){}return location.hash.slice(1)||'dashboard'}
 function navigate(){let p=pageFromHost();if(!NAV.some(g=>g[1].some(i=>i[0]===p)))p='dashboard';page=p;filter='';filterStatus='全部';closeModal();render();window.scrollTo({top:0,behavior:'instant'});document.getElementById('sidebar').classList.remove('open')}
 function render(){navRender();const fn=PAGES[page];document.getElementById('main').innerHTML=fn?fn():empty('页面准备中','请切换模块');bindInputs()}
 function bindInputs(){document.getElementById('listSearch')?.addEventListener('input',e=>{filter=e.target.value;const pos=e.target.selectionStart;render();const el=document.getElementById('listSearch');el.focus();el.setSelectionRange(pos,pos)});document.getElementById('statusFilter')?.addEventListener('change',e=>{filterStatus=e.target.value;render()});document.getElementById('globalSearch')?.addEventListener('input',e=>searchResults(e.target.value))}
