@@ -731,7 +731,26 @@ function field(label,id,type='text',value='',opts='',full=false){return `<label 
 const val=id=>document.getElementById(id)?.value||'';
 function fail(s){let e=document.getElementById('formError');if(!e){e=document.createElement('p');e.className='form-error';e.id='formError';document.getElementById('dialogBody').appendChild(e)}e.textContent=s;return false}
 function navRender(){document.getElementById('navigation').innerHTML=NAV.map(([h,items])=>`<div class="nav-group">${h}</div>${items.map(([id,t,ic])=>`<a href="#${id}" class="${page===id?'active':''}" ${page===id?'aria-current="page"':''}>${ico(ic)}${t}</a>`).join('')}`).join('');document.getElementById('breadcrumb').textContent=NAV.flatMap(g=>g[1]).find(i=>i[0]===page)?.[1]||'经营工作台';document.getElementById('roleSelect').value=state.role}
-function navigate(){let file=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');if(file==='index')file='';let p=file||new URLSearchParams(location.search).get('p')||location.hash.slice(1)||'dashboard';if(!NAV.some(g=>g[1].some(i=>i[0]===p)))p='dashboard';page=p;filter='';filterStatus='全部';closeModal();render();window.scrollTo({top:0,behavior:'instant'});document.getElementById('sidebar').classList.remove('open')}
+const JDY_DASH={
+'6aacc183ec4e549e23142921':'dashboard',
+'6aacc6ff0fda86317a02218a':'crm',
+'6aacc6f8324f4946889a5e38':'orders',
+'6aacc69cfef90c88974dac27':'delivery',
+'6aacc695500b6414db14765b':'products',
+'6aacc68e38d46f28d959ca0e':'purchase',
+'6aacc6871a0eef8c9910a9ed':'planning',
+'6aacc680530d9cb0b7041d27':'production',
+'6aacc67909d3356f0eb9d37d':'quality',
+'6aacc672bdd333b691361f4c':'warehouse',
+'6aacc66a824825f370121a53':'trace',
+'6aacc662def1bdc4b2f50b1c':'equipment',
+'6aacc659324f49468899e6f5':'hr',
+'6aacc651d50d0851f7806ed1':'office',
+'6aacc6481a0eef8c99107a1d':'mobile',
+'6aacc4086876585b523f5288':'finance'
+};
+function pageFromHost(){try{let file=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');if(file&&file!=='index')return file;let q=new URLSearchParams(location.search).get('p');if(q)return q;let m=(document.referrer||'').match(/dash\/([a-f0-9]+)/i);if(m&&JDY_DASH[m[1]])return JDY_DASH[m[1]];}catch(e){}return location.hash.slice(1)||'dashboard'}
+function navigate(){let p=pageFromHost();if(!NAV.some(g=>g[1].some(i=>i[0]===p)))p='dashboard';page=p;filter='';filterStatus='全部';closeModal();render();window.scrollTo({top:0,behavior:'instant'});document.getElementById('sidebar').classList.remove('open')}
 function render(){navRender();const fn=PAGES[page];document.getElementById('main').innerHTML=fn?fn():empty('页面准备中','请切换模块');bindInputs()}
 function bindInputs(){document.getElementById('listSearch')?.addEventListener('input',e=>{filter=e.target.value;const pos=e.target.selectionStart;render();const el=document.getElementById('listSearch');el.focus();el.setSelectionRange(pos,pos)});document.getElementById('statusFilter')?.addEventListener('change',e=>{filterStatus=e.target.value;render()});document.getElementById('globalSearch')?.addEventListener('input',e=>searchResults(e.target.value))}
 const PAGES={};
